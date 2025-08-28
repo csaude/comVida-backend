@@ -38,7 +38,7 @@ public class PatientImportFileJob implements ApplicationEventListener<Applicatio
 
         scheduler.schedule(() -> {
             try {
-                importFileService.processPendingFiles();
+                importFileService.filesToBeProcessed();
             } catch (Exception e) {
                 System.err.println("Erro ao processar ficheiros pendentes: " + e.getMessage());
             } finally {

@@ -1,5 +1,6 @@
 package mz.org.csaude.comvida.backend.entity;
 
+import io.micronaut.core.annotation.Introspected;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.AssertTrue;
@@ -14,8 +15,9 @@ import java.util.Date;
 @Getter
 @Setter
 @Serdeable
+@Introspected
 @Table(name = "cohort_members")
-public class CohortMember extends BaseEntity {
+public class CohortMember extends BaseEntity { // Membro que entrou na cohort
 
     // Relacionamento com a coorte
     @ManyToOne
@@ -27,12 +29,12 @@ public class CohortMember extends BaseEntity {
     private String originId;
 
     // Data de inclusão na coorte [Caso o paciente venha da INTEGRATTION, inclusionDate sera igual ao createdAt, se vier do FILE, sera agendado no frontend]
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "inclusion_date")
     private Date inclusionDate;
 
     // Data de exclusão da coorte
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "exclusion_date")
     private Date exclusionDate;
 
@@ -55,5 +57,15 @@ public class CohortMember extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "import_file_id")
     private PatientImportFile patientImportFile;
+
+    // Grupo a que este membro pertence
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "group_id")
+    private Group group;
+
+    // Voluntario a quem foi alocado para segmento
+    @ManyToOne
+    @JoinColumn(name = "assigned_by_user_id", nullable = true)
+    private User assignedBy;
 
 }
